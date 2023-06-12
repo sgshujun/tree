@@ -67,7 +67,7 @@ document.addEventListener('keydown', (e) => {
   }
   switch (e.key) {
     case 'f':
-      container.requestFullscreen();
+      document.body.requestFullscreen();
       break;
     // case 'p':
     //   video.play();
