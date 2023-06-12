@@ -116,6 +116,7 @@ function serialEvent() {
      
     
     let sensors = split(inString , "," );
+    console.log(sensors);
     
 
     // locH = map(int(sensors[0]), 0,1023, 0, width);
