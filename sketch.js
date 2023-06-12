@@ -33,44 +33,67 @@ function setup() {
 
 
 const container = document.querySelector('#container');
-const mainVideos = document.querySelectorAll('.main-video');
+const videoBackground = document.querySelector('#video-background');
+const videoLayers = document.querySelectorAll('.video-layer');
+const videoCover = document.querySelector('#video-cover');
 const info = document.querySelector('#info');
 
-// TODO: make this work for multiple videos
-const video = mainVideos[0];
+function findVideoLayer(key) {
+  const num = parseInt(key);
+	if (Number.isInteger(num)) {
+		return videoLayers[num - 1];
+	}
+}
 
+function playVideoLayer(videoLayer) {
+  if (videoLayer.paused) {
+    videoLayer.playbackRate = 1;
+    videoLayer.play();
+  }
+}
 
+function pauseVideoLayer(videoLayer) {
+  if (!videoLayer.paused) {
+    videoLayer.pause();
+    videoLayer.currentTime = 0;
+  }
+}
 
 document.addEventListener('keydown', (e) => {
   console.log(e);
-	if (Number.isInteger(parseInt(e.key))) {
-		mainVideos[parseInt(e.key) - 1].play();
-		return;
-	}
+  const videoLayer = findVideoLayer(e.key);
+  if (videoLayer) {
+    playVideoLayer(videoLayer);
+  }
   switch (e.key) {
     case 'f':
       container.requestFullscreen();
       break;
-    case 'p':
-      video.play();
-      break;
-    case 's':
-      video.pause();
-      break;
-    case ']':
-      video.playbackRate += 0.1;
-      info.textContent = video.playbackRate;
-      break;
-    case '[':
-      video.playbackRate -= 0.1;
-      info.textContent = video.playbackRate;
-      break;
-    case '.':
-      video.currentTime = (video.currentTime + 1) % video.duration;
-      break;
+    // case 'p':
+    //   video.play();
+    //   break;
+    // case 's':
+    //   video.pause();
+    //   break;
+    // case ']':
+    //   video.playbackRate += 0.1;
+    //   info.textContent = video.playbackRate;
+    //   break;
+    // case '[':
+    //   video.playbackRate -= 0.1;
+    //   info.textContent = video.playbackRate;
+    //   break;
+    // case '.':
+    //   video.currentTime = (video.currentTime + 1) % video.duration;
+    //   break;
     default:
       break;
   }
+});
+
+document.addEventListener('keyup', (e) => {
+  const videoLayer = findVideoLayer(e.key);
+  pauseVideoLayer(videoLayer);
 });
 
 
@@ -116,7 +139,7 @@ function serialEvent() {
      
     
     let sensors = split(inString , "," );
-    console.log(sensors);
+    const values = sensors.map(Number);
     
 
     // locH = map(int(sensors[0]), 0,1023, 0, width);
@@ -126,7 +149,14 @@ function serialEvent() {
     if (int(sensors[0]) > 500) {
       video.play();
     }
-    
+
+    for (let i = 0; i < values.length; i++) {
+      if (values[i] > 500) {
+        playVideoLayer(videoLayers[i]);
+      } else {
+        pauseVideoLayer(videoLayers[i]);
+      }
+    } 
     
   }
 }
