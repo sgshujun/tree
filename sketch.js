@@ -145,10 +145,6 @@ function serialEvent() {
     // locH = map(int(sensors[0]), 0,1023, 0, width);
     // locV = map(int(sensors[1]), 0, 1023,0, height);
     serial.write("x");
-    
-    if (int(sensors[0]) > 500) {
-      video.play();
-    }
 
     for (let i = 0; i < values.length; i++) {
       if (values[i] > 500) {
