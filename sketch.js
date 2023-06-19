@@ -45,7 +45,15 @@ function findVideoLayer(key) {
 	}
 }
 
+const audio = document.getElementById('audio');
+function playAudio() {
+  if (audio.paused) { 
+    audio.play();
+  }
+}
+
 function playVideoLayer(videoLayer) {
+  playAudio();
   if (videoLayer && !videoLayer._playing) {
     videoLayer.playbackRate = 1;
     videoLayer.play();
