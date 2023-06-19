@@ -46,16 +46,18 @@ function findVideoLayer(key) {
 }
 
 function playVideoLayer(videoLayer) {
-  if (videoLayer.paused) {
+  if (videoLayer && !videoLayer._playing) {
     videoLayer.playbackRate = 1;
     videoLayer.play();
+    videoLayer._playing = true;
   }
 }
 
 function pauseVideoLayer(videoLayer) {
-  if (!videoLayer.paused) {
+  if (videoLayer && videoLayer._playing) {
     videoLayer.pause();
     videoLayer.currentTime = 0;
+    videoLayer._playing = false;
   }
 }
 
@@ -140,6 +142,8 @@ function serialEvent() {
     
     let sensors = split(inString , "," );
     const values = sensors.map(Number);
+
+    // console.log(values);
     
 
     // locH = map(int(sensors[0]), 0,1023, 0, width);
@@ -147,7 +151,7 @@ function serialEvent() {
     serial.write("x");
 
     for (let i = 0; i < values.length; i++) {
-      if (values[i] > 500) {
+      if (values[i] < 150) {
         playVideoLayer(videoLayers[i]);
       } else {
         pauseVideoLayer(videoLayers[i]);
