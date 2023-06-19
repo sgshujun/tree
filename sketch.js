@@ -47,14 +47,22 @@ function findVideoLayer(key) {
 
 const audio = document.getElementById('audio');
 function playAudio() {
-  if (audio.paused) { 
-    audio.play();
+  if (audio.paused) {
+    console.log('audio play');
+    try {
+      audio.play();
+    } catch (e) {
+      console.log("click the page");
+    }
   }
 }
 
 function playVideoLayer(videoLayer) {
+  if (!videoLayer) {
+    return;
+  }
   playAudio();
-  if (videoLayer && !videoLayer._playing) {
+  if (!videoLayer._playing) {
     videoLayer.playbackRate = 1;
     videoLayer.play();
     videoLayer._playing = true;
@@ -62,7 +70,10 @@ function playVideoLayer(videoLayer) {
 }
 
 function pauseVideoLayer(videoLayer) {
-  if (videoLayer && videoLayer._playing) {
+  if (!videoLayer) {
+    return;
+  }
+  if (videoLayer._playing) {
     videoLayer.pause();
     videoLayer.currentTime = 0;
     videoLayer._playing = false;
@@ -70,7 +81,7 @@ function pauseVideoLayer(videoLayer) {
 }
 
 document.addEventListener('keydown', (e) => {
-  console.log(e);
+  // console.log(e);
   const videoLayer = findVideoLayer(e.key);
   if (videoLayer) {
     playVideoLayer(videoLayer);
@@ -189,3 +200,7 @@ function portDisconnect() {
   console.log("port disconnected");
 }
 
+const cover = document.getElementById('cover');
+cover.addEventListener('click', () => {
+  cover.remove();
+})
